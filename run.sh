@@ -6,6 +6,18 @@ DB_PATH=/app/data/kuma.db
 BACKUP_PATH=/app/data/kuma_backup.db
 REMOTE_PATH=r2:/$BUCKET/kuma/kuma_backup.db
 
+#创建rclone 配置文件
+cat > $RCLONE_CONFIG<< EOF
+[r2]
+type = s3
+provider = Other
+env_auth = false
+access_key_id = ${ACCESS_ID}
+secret_access_key = ${ACCESS_SECRET_KEY}
+endpoint = ${ENDPOINT}
+EOF
+
+
 # 检查是否存在备份
 if rclone --config $RCLONE_CONFIG ls $REMOTE_PATH; then
     # 如果存在备份，则恢复
